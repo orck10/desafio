@@ -1,0 +1,31 @@
+version: '3.1'
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: jorge
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+    volumes:
+      - ./mongovolume:/data/db
+    networks:
+      - jogodados
+    ports:
+      - '27017:27017'
+  jogodados:
+    container_name: servidordados
+    restart: always
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    networks:
+      - jogodados
+    depends_on:
+      - mongo
+networks:
+  jogodados:
+    driver: bridge
