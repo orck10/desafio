@@ -11,21 +11,21 @@ services:
     volumes:
       - ./mongovolume:/data/db
     networks:
-      - jogodados
+      - challenge
     ports:
       - '27017:27017'
-  jogodados:
-    container_name: servidordados
+  challenge:
+    container_name: challenge
     restart: always
     build:
       context: ../
       dockerfile: Dockerfile
     ports:
-      - '80:80'
+      - '8080:8080'
     networks:
-      - jogodados
+      - challenge
     depends_on:
       - mongo
 networks:
-  jogodados:
+  challenge:
     driver: bridge
