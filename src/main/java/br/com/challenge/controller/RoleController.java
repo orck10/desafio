@@ -1,5 +1,7 @@
 package br.com.challenge.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +29,14 @@ public class RoleController {
 	private HttpServletRequest request;
 	
 	@PostMapping(path = "/")
-	public ResponseEntity<RolePresenter> putRope(@RequestBody RolePresenter entity){
+	public ResponseEntity<RolePresenter> postRole(@RequestBody RolePresenter entity){
 		requestLog.logRequest(HttpMethod.POST.toString(), request.getRequestURI(), entity.toString());
 		return service.putRole(entity);
+	}
+	
+	@PostMapping(path = "/new")
+	public ResponseEntity<List<String>> newRole(@RequestBody RolePresenter entity){
+		requestLog.logRequest(HttpMethod.POST.toString(), request.getRequestURI(), entity.toString());
+		return service.newRoleEntity(entity);
 	}
 }

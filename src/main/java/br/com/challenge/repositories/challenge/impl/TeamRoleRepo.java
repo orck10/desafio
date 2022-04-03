@@ -19,7 +19,6 @@ import br.com.challenge.dto.parser.TeamPresenterParser;
 import br.com.challenge.entities.challenge.Role;
 import br.com.challenge.entities.challenge.Team;
 import br.com.challenge.entities.challenge.User;
-import br.com.challenge.enums.RoleEnum;
 import br.com.challenge.enums.SQLEnums;
 import br.com.challenge.repositories.challenge.RoleManagerRepo;
 import br.com.challenge.repositories.challenge.RoleRepo;
@@ -56,12 +55,12 @@ public class TeamRoleRepo implements RoleRepo<TeamPresenter, Team>{
 		for (Object[] objects : finded) {
 			User user = (User) objects[0];
 			Role role = (Role) objects[1];
-			if(roles.containsKey(RoleEnum.valueOf(role.getRole()).getRole())) {
-				roles.get(RoleEnum.valueOf(role.getRole()).getRole()).add(user);
+			if(roles.containsKey(role.getRole())) {
+				roles.get(role.getRole()).add(user);
 			}else {
 				List<User> users = new ArrayList<>();
 				users.add(user);
-				roles.put(RoleEnum.valueOf(role.getRole()).getRole(), users);
+				roles.put(role.getRole(), users);
 			}
 		}
 		resp.setRole(roles);
@@ -94,7 +93,7 @@ public class TeamRoleRepo implements RoleRepo<TeamPresenter, Team>{
 		Query query = entityManager.createQuery(queryS);
 		List<Role> roles = query.getResultList();
 		if(roles == null || roles.isEmpty()) {
-			roleManagRep.save(new Role(user.getId(), id, RoleEnum.valueOfRole(role).toString()));
+			roleManagRep.save(new Role(user.getId(), id, role));
 		}
 	}
 	

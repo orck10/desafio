@@ -17,9 +17,9 @@ import br.com.challenge.dto.MetaData;
 import br.com.challenge.dto.UserPresenter;
 import br.com.challenge.dto.parser.UserPresenterParser;
 import br.com.challenge.entities.challenge.Role;
+import br.com.challenge.entities.challenge.RoleEntity;
 import br.com.challenge.entities.challenge.Team;
 import br.com.challenge.entities.challenge.User;
-import br.com.challenge.enums.RoleEnum;
 import br.com.challenge.enums.SQLEnums;
 import br.com.challenge.repositories.challenge.RoleManagerRepo;
 import br.com.challenge.repositories.challenge.RoleRepo;
@@ -55,12 +55,12 @@ public class UserRoleRepo implements RoleRepo<UserPresenter, User>{
 		for (Object[] objects : finded) {
 			Team team = (Team) objects[0];
 			Role role = (Role) objects[1];
-			if(roles.containsKey(RoleEnum.valueOf(role.getRole()).getRole())) {
-				roles.get(RoleEnum.valueOf(role.getRole()).getRole()).add(team);
+			if(roles.containsKey(role.getRole())) {
+				roles.get(role.getRole()).add(team);
 			}else {
 				List<Team> teams = new ArrayList<>();
 				teams.add(team);
-				roles.put(RoleEnum.valueOf(role.getRole()).getRole(), teams);
+				roles.put(role.getRole(), teams);
 			}
 		}
 		resp.setRole(roles);
@@ -71,7 +71,7 @@ public class UserRoleRepo implements RoleRepo<UserPresenter, User>{
 	public Optional<UserPresenter> insert(UserPresenter dto) {
 		if(dto.getRole() == null) return Optional.of(dto);
 		for (Map.Entry<String, List<Team>> entry : dto.getRole().entrySet()) {
-			saveRole(entry.getKey(), entry.getValue(), dto.getId());
+			if(roleVerify(entry.getKey())) saveRole(entry.getKey(), entry.getValue(), dto.getId());
 		}
 		return findEntity(UserPresenterParser.presenterToUser(dto));
 	}
@@ -94,9 +94,21 @@ public class UserRoleRepo implements RoleRepo<UserPresenter, User>{
 		Query query = entityManager.createQuery(queryS);
 		List<Role> roles = query.getResultList();
 		if(roles == null || roles.isEmpty()) {
-			roleManagRep.save(new Role(id, team.getId(), RoleEnum.valueOfRole(role).toString()));
+			roleManagRep.save(new Role(id, team.getId(), role));
 		}
 		
+	}
+	
+	private boolean roleVerify(String role) {
+		String cond = " r.roleName = '{role}'".replace("{role}", role); 
+		String queryS = SQLEnums.SIMPLE_FIND_WITH_WHERE.getSql()
+				.replace("{val}", "r")
+				.replace("{tab}", "role_entity_challenge r")
+				.replace("{cond}", cond);
+		
+		Query query = entityManager.createQuery(queryS);
+		List<RoleEntity> roles = query.getResultList();
+		return role == null || roles.isEmpty();
 	}
 	
 	private void insertTeam(Team team) {
