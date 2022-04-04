@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.google.gson.Gson;
+
 @Entity(name="role_entity_challenge")
 public class RoleEntity {
 	
@@ -29,5 +31,9 @@ public class RoleEntity {
 
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
+	}
+	
+	public String toString() {
+		return new Gson().toJson(this);
 	}
 }

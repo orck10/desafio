@@ -2,6 +2,7 @@ package br.com.challenge.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.google.gson.Gson;
 
 @JsonInclude(Include.NON_NULL)	
 public class RolePresenter {
@@ -35,5 +36,9 @@ public class RolePresenter {
 
 	public String getTeamID() {
 		return teamID;
+	}
+	
+	public String toString() {
+		return new Gson().toJson(this);
 	}
 }

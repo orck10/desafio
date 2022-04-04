@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.challenge.dto.RolePresenter;
 import br.com.challenge.dto.parser.RolePresenterParser;
+import br.com.challenge.entities.challenge.Role;
 import br.com.challenge.entities.challenge.RoleEntity;
 import br.com.challenge.entities.handler.error.BadRequestError;
 import br.com.challenge.entities.handler.error.InternalSeverError;
@@ -34,7 +35,9 @@ public class ServiceRoleImpl implements ServiceRole<RolePresenter>{
 	@Override
 	public ResponseEntity<RolePresenter> putRole(RolePresenter entityRole) {
 		try {
-			return new ResponseEntity<>(RolePresenterParser.RoleToPresenter(roleRepo.save(RolePresenterParser.presenterToRole(entityRole))), HttpStatus.OK);
+			Role role = RolePresenterParser.presenterToRole(entityRole);
+			role = roleRepo.save(role);
+			return new ResponseEntity<>(RolePresenterParser.RoleToPresenter(role), HttpStatus.OK);
 		}catch (Exception e) {
 			log.error(e.getMessage());
 			throw new InternalSeverError(e.getMessage());
