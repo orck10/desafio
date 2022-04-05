@@ -108,7 +108,7 @@ public class UserRoleRepo implements RoleRepo<UserPresenter, User>{
 		
 		Query query = entityManager.createQuery(queryS);
 		List<RoleEntity> roles = query.getResultList();
-		return role == null || roles.isEmpty();
+		return role != null && !roles.isEmpty();
 	}
 	
 	private void insertTeam(Team team) {
@@ -125,7 +125,7 @@ public class UserRoleRepo implements RoleRepo<UserPresenter, User>{
 		userList.forEach(u -> userPresenterList.add(this.findEntity(u).get()));
 		
 		MetaData meta = new MetaData(page, size, lastPage);
-		DataPresenter data = new DataPresenter(userList, meta);
+		DataPresenter data = new DataPresenter(userPresenterList, meta);
 		return data;
 	}
 	

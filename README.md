@@ -16,11 +16,14 @@ To run tests you must have installed maven, docker and Docker Composer, because 
 
 - docker-compose -f startDB.yml up -d
 
+Before rum testes need comment the line 6 and uncomment line 5 of main properties.
+
 After that, you are able to run the tests with the follow command:
 
 - mvn clean install
 
 #### Run app
+Before run the app need comment the line 5 and uncomment line 6 of main properties.
 To run this application with the both databases you must have installed Docker and Docker Composer. With docker installed you can open the "docker" directory with "start.yml" file, after that you can run the follow command:
 
 - docker-compose -f start.yml up -d

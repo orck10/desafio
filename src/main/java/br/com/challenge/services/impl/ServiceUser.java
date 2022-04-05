@@ -81,6 +81,7 @@ public class ServiceUser implements ServiceEntities<UserPresenter>{
 			throw new InternalSeverError(e.getMessage());
 		}
 	}
+	
 	/*
 	 * 
 	 * 

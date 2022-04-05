@@ -1,14 +1,14 @@
 package br.com.challenge;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 
 import br.com.challenge.entities.challenge.Team;
 import br.com.challenge.entities.challenge.User;
 import br.com.challenge.repositories.challenge.TeamRepo;
 import br.com.challenge.repositories.challenge.UserRepo;
 
-@Configuration
+@Service
 public class DBContext {
 	
 	@Autowired

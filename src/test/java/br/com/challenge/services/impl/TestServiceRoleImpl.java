@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -22,9 +23,13 @@ import org.springframework.http.ResponseEntity;
 import br.com.challenge.dto.RolePresenter;
 import br.com.challenge.entities.challenge.Role;
 import br.com.challenge.entities.challenge.RoleEntity;
+import br.com.challenge.entities.challenge.Team;
+import br.com.challenge.entities.challenge.User;
 import br.com.challenge.entities.handler.error.BadRequestError;
 import br.com.challenge.repositories.challenge.RoleEntityRepo;
 import br.com.challenge.repositories.challenge.RoleManagerRepo;
+import br.com.challenge.repositories.challenge.TeamRepo;
+import br.com.challenge.repositories.challenge.UserRepo;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestServiceRoleImpl {
@@ -34,6 +39,12 @@ public class TestServiceRoleImpl {
 	
 	@Mock
 	private RoleEntityRepo roleEntityRepo;
+	
+	@Mock
+	private UserRepo userRepo;
+	
+	@Mock
+	private TeamRepo teamRepo;
 	
 	@InjectMocks
 	private ServiceRoleImpl serviceRoleImpl;
@@ -46,7 +57,8 @@ public class TestServiceRoleImpl {
 	public void putRole_Sucess() {
 		RolePresenter rolePresenter = getRolePresenter();
 		Role role = new Role(rolePresenter.getUserId(), rolePresenter.getTeamID(), rolePresenter.getRole());
-		
+		when(userRepo.findById(Mockito.any())).thenReturn(Optional.of(new User()));
+		when(teamRepo.findById(Mockito.any())).thenReturn(Optional.of(new Team()));
 		when(roleRepo.save(Mockito.any())).thenReturn(role);
 		
 		ResponseEntity<RolePresenter> out = serviceRoleImpl.putRole(rolePresenter);
@@ -61,6 +73,8 @@ public class TestServiceRoleImpl {
 		RolePresenter rolePresenter = getRolePresenter();
 		String errorMessage = "Teste Erro";
 		
+		when(userRepo.findById(Mockito.any())).thenReturn(Optional.of(new User()));
+		when(teamRepo.findById(Mockito.any())).thenReturn(Optional.of(new Team()));
 		when(roleRepo.save(Mockito.any())).thenThrow(new BadRequestError(errorMessage));
 		try {
 			ResponseEntity<RolePresenter> out = serviceRoleImpl.putRole(rolePresenter);

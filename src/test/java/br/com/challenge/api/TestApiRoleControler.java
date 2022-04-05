@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.com.challenge.DBContext;
 import br.com.challenge.dto.ResponseErrorDto;
 import br.com.challenge.dto.RolePresenter;
 import br.com.challenge.entities.challenge.RoleEntity;
@@ -39,6 +41,14 @@ public class TestApiRoleControler {
 	
 	@Autowired
 	private RoleEntityRepo roleEntityRepo;
+	
+	@Autowired
+	private DBContext dbContext;
+	
+	@Before
+	public void setUp() {
+		dbContext.runDBContext();
+	}
 	
 	@Test
 	public void postRole_POST_SUCCESS() {
@@ -73,13 +83,13 @@ public class TestApiRoleControler {
 		
 		assertEquals(nBefore.longValue()+1, nAfter.longValue());
 		assertEquals(HttpStatus.BAD_REQUEST, out.getStatusCode());
-		assertEquals("O campo UserId não pode estar vazio", out.getBody().getError());
+		assertEquals("UserId invalido", out.getBody().getError());
 	}
 	
 	@Test
 	public void postRole_POST_BAD_REQUEST_NO_TEAM_ID() {
 		RolePresenter role = new RolePresenter(null, 
-				"7a967a98-e7ef-4009-9e87-b500e26f9b45", 
+				"94e43ccd-a638-4df8-8885-a7a1bb384c03", 
 				null);
 		
 		Long nBefore = logHandlerRepo.count();
@@ -90,7 +100,7 @@ public class TestApiRoleControler {
 		
 		assertEquals(nBefore.longValue()+1, nAfter.longValue());
 		assertEquals(HttpStatus.BAD_REQUEST, out.getStatusCode());
-		assertEquals("O campo TeamId não pode estar vazio", out.getBody().getError());
+		assertEquals("TeamId invalido", out.getBody().getError());
 	}
 	
 	@Test

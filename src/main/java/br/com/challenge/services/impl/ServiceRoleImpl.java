@@ -18,6 +18,8 @@ import br.com.challenge.entities.handler.error.BadRequestError;
 import br.com.challenge.entities.handler.error.InternalSeverError;
 import br.com.challenge.repositories.challenge.RoleEntityRepo;
 import br.com.challenge.repositories.challenge.RoleManagerRepo;
+import br.com.challenge.repositories.challenge.TeamRepo;
+import br.com.challenge.repositories.challenge.UserRepo;
 import br.com.challenge.services.ServiceRole;
 
 @Service
@@ -25,6 +27,12 @@ public class ServiceRoleImpl implements ServiceRole<RolePresenter>{
 	
 	@Autowired
 	private RoleManagerRepo roleRepo;
+	
+	@Autowired
+	private UserRepo userRepo;
+	
+	@Autowired
+	private TeamRepo teamRepo;
 	
 	@Autowired
 	private RoleEntityRepo roleEntityRepo;
@@ -35,8 +43,8 @@ public class ServiceRoleImpl implements ServiceRole<RolePresenter>{
 	@Override
 	public ResponseEntity<RolePresenter> putRole(RolePresenter entityRole) {
 		try {
-			if(entityRole.getUserId() == null || entityRole.getUserId().isBlank() || entityRole.getUserId().isEmpty()) throw new BadRequestError("O campo UserId não pode estar vazio");
-			if(entityRole.getTeamID() == null || entityRole.getTeamID().isBlank() || entityRole.getTeamID().isEmpty()) throw new BadRequestError("O campo TeamId não pode estar vazio");
+			if(entityRole.getUserId() == null || !userRepo.findById(entityRole.getUserId()).isPresent()) throw new BadRequestError("UserId invalido");
+			if(entityRole.getTeamID() == null || !teamRepo.findById(entityRole.getTeamID()).isPresent()) throw new BadRequestError("TeamId invalido");
 			Role role = RolePresenterParser.presenterToRole(entityRole);
 			role = roleRepo.save(role);
 			return new ResponseEntity<>(RolePresenterParser.RoleToPresenter(role), HttpStatus.OK);

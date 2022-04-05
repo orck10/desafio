@@ -48,6 +48,10 @@ public class UserPresenter {
 		return displayName;
 	}
 	
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+	
 	public void setRole(Map<String, List<Team>> role) {
 		this.role = role;
 	}

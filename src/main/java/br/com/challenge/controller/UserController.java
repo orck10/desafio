@@ -40,7 +40,7 @@ public class UserController {
 	}
 	
 	@PostMapping(path = "")
-	public ResponseEntity<UserPresenter> postGroup(@RequestBody UserPresenter user){
+	public ResponseEntity<UserPresenter> postUser(@RequestBody UserPresenter user){
 		requestLog.logRequest(HttpMethod.POST.toString(), request.getRequestURI(), user.toString());
 		return service.insertInsertOne(user);
 	}
