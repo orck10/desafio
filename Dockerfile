@@ -4,7 +4,7 @@ ADD src src
 ADD pom.xml pom.xml
 ADD mvnw mvnw
 RUN chmod a+x mvnw
-RUN ./mvnw clean install
+RUN ./mvnw clean install -DskipTests
 RUN rm -r src
 RUN ls -a
 

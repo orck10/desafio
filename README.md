@@ -11,6 +11,15 @@ eg:
 
 With these and points you can send the massive data of users and teams, or only one. To save the data I used the H2 database, and to log the data alteration on transactions MongoDB
 
+#### Run tests
+To run tests you must have installed maven, docker and Docker Composer, because you will need have the mongo instance runing. To do this open de "docker" directory and run the follow command:
+
+- docker-compose -f startDB.yml up -d
+
+After that, you are able to run the tests with the follow command:
+
+- mvn clean install
+
 #### Run app
 To run this application with the both databases you must have installed Docker and Docker Composer. With docker installed you can open the "docker" directory with "start.yml" file, after that you can run the follow command:
 
