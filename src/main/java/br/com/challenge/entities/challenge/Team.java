@@ -6,6 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import com.google.gson.Gson;
+
 @Entity(name="team_challenge")
 public class Team {
 	
@@ -14,7 +16,7 @@ public class Team {
 	private String name;
 	
 	@OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "addressId", nullable = true)
+    @JoinColumn(name = "team_lead", nullable = true)
     private User lead;
 	
 	public Team() {}
@@ -39,5 +41,10 @@ public class Team {
 
 	public void setLead(User lead) {
 		this.lead = lead;
+	}
+	
+	@Override
+	public String toString() {
+		return new Gson().toJson(this);
 	}
 }

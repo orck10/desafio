@@ -20,6 +20,10 @@ public class RoleEntity {
 	@Column(unique = true)
 	private String roleName;
 	
+	public RoleEntity() {
+		super();
+	}
+	
 	public RoleEntity(String roleName) {
 		super();
 		this.roleName = roleName;

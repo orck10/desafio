@@ -21,7 +21,7 @@ public class CustomRoles {
 				RoleEntity role = new RoleEntity(r);
 				roleEntityRepo.save(role);
 			}catch (Exception e) {
-				log.warn("Falha ai tentar incluir Role " + r);
+				log.warn("Falha ao tentar incluir Role " + r);
 			}
 		}
 		return true;

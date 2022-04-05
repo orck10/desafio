@@ -16,7 +16,8 @@ public class TeamPresenter {
 	private String name;
 	private User teamLead;
 	private Map<String, List<User>> role;
-	
+	private String teamLeadId;
+	private List<String> teamMemberIds;
 	
 	public TeamPresenter(String id, String name, User teamLead) {
 		this.id = id;
@@ -46,6 +47,22 @@ public class TeamPresenter {
 
 	public void setTeamLead(User teamLead) {
 		this.teamLead = teamLead;
+	}
+
+	public String getTeamLeadId() {
+		return teamLeadId;
+	}
+
+	public void setTeamLeadId(String teamLeadId) {
+		this.teamLeadId = teamLeadId;
+	}
+
+	public List<String> getTeamMemberIds() {
+		return teamMemberIds;
+	}
+
+	public void setTeamMemberIds(List<String> teamMemberIds) {
+		this.teamMemberIds = teamMemberIds;
 	}
 
 	@Override

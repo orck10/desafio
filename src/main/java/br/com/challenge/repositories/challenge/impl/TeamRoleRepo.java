@@ -19,6 +19,7 @@ import br.com.challenge.dto.parser.TeamPresenterParser;
 import br.com.challenge.entities.challenge.Role;
 import br.com.challenge.entities.challenge.Team;
 import br.com.challenge.entities.challenge.User;
+import br.com.challenge.enums.DefaltRoleEnum;
 import br.com.challenge.enums.SQLEnums;
 import br.com.challenge.repositories.challenge.RoleManagerRepo;
 import br.com.challenge.repositories.challenge.RoleRepo;
@@ -69,7 +70,8 @@ public class TeamRoleRepo implements RoleRepo<TeamPresenter, Team>{
 
 	@Override
 	public Optional<TeamPresenter> insert(TeamPresenter dto) {
-		if(dto.getRole() == null) return Optional.of(dto);
+		if(dto.getTeamMemberIds() != null) dto.getTeamMemberIds().forEach(u -> inserDefaltUsers(u, dto.getId()));
+		if(dto.getRole() == null) return findEntity(TeamPresenterParser.presenterToTeam(dto));
 		for (Map.Entry<String, List<User>> entry : dto.getRole().entrySet()) {
 			saveRole(entry.getKey(), entry.getValue(), dto.getId());
 		}
@@ -79,6 +81,11 @@ public class TeamRoleRepo implements RoleRepo<TeamPresenter, Team>{
 	private void saveRole(String role, List<User> users, String id) {
 		users.forEach(u -> insertUser(u));
 		users.forEach(u -> insertRole(u, role, id));
+	}
+	
+	private void inserDefaltUsers(String userId, String id) {
+		Optional<User> user = userRepo.findById(userId);
+		if(user.isPresent()) insertRole(user.get(), DefaltRoleEnum.DEVELOPER.getRole(), id);
 	}
 	
 	private void insertRole(User user, String role, String id) {

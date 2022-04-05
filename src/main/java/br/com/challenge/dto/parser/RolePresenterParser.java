@@ -11,7 +11,7 @@ public class RolePresenterParser {
 	public static Role presenterToRole(RolePresenter presenter){
 		
 		String role = presenter.getRole() == null || presenter.getRole().isBlank() || presenter.getRole().isEmpty() ?
-				DefaltRoleEnum.DEVELOPER.toString(): 
+				DefaltRoleEnum.DEVELOPER.getRole(): 
 				presenter.getRole();
 		return new Role(presenter.getUserId(), presenter.getTeamID(), role);
 	}

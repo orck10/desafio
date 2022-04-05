@@ -87,13 +87,22 @@ public class ServiceTeam implements ServiceEntities<TeamPresenter>{
 
 	private TeamPresenter saveTeam(TeamPresenter presenter) {
 		Optional<Team> inDb = teamRepo.findById(presenter.getId());
-		return inDb.isEmpty() || !inDb.isPresent() ? insertTeam(presenter) : 
+		return !inDb.isPresent() ? insertTeam(presenter) : 
 					roleRepo.findEntity(inDb.get()).get();
 	}
 	
 	private TeamPresenter insertTeam(TeamPresenter presenter) {
+		presenter.setTeamLead(verifyTeamLeader(presenter));
 		teamRepo.save(TeamPresenterParser.presenterToTeam(presenter));
-		return roleRepo.insert(presenter).get();
+		TeamPresenter saved = roleRepo.insert(presenter).get();
+		return saved;
+	}
+	
+	private User verifyTeamLeader(TeamPresenter presenter) {
+		if(presenter.getTeamLead() != null) return presenter.getTeamLead();
+		if(presenter.getTeamLeadId() == null) return null;
+		Optional<User> teamLead = userRepo.findById(presenter.getTeamLeadId());
+		return teamLead.isEmpty() ? null : teamLead.get();
 	}
 
 	@Override
@@ -102,7 +111,7 @@ public class ServiceTeam implements ServiceEntities<TeamPresenter>{
 			Optional<User> lead = userRepo.findById(userId);
 			if(lead.isEmpty()) throw new BadRequestError("Lider não consta na base");
 			Optional<Team> team = teamRepo.findById(teamId);
-			if(lead.isEmpty()) throw new BadRequestError("Time não consta na base");
+			if(team.isEmpty()) throw new BadRequestError("Time não consta na base");
 			team.get().setLead(lead.get());
 			return  new ResponseEntity<>(TeamPresenterParser.teamToPresenter(teamRepo.save(team.get())), HttpStatus.OK);
 			

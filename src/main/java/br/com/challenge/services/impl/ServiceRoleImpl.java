@@ -35,9 +35,14 @@ public class ServiceRoleImpl implements ServiceRole<RolePresenter>{
 	@Override
 	public ResponseEntity<RolePresenter> putRole(RolePresenter entityRole) {
 		try {
+			if(entityRole.getUserId() == null || entityRole.getUserId().isBlank() || entityRole.getUserId().isEmpty()) throw new BadRequestError("O campo UserId não pode estar vazio");
+			if(entityRole.getTeamID() == null || entityRole.getTeamID().isBlank() || entityRole.getTeamID().isEmpty()) throw new BadRequestError("O campo TeamId não pode estar vazio");
 			Role role = RolePresenterParser.presenterToRole(entityRole);
 			role = roleRepo.save(role);
 			return new ResponseEntity<>(RolePresenterParser.RoleToPresenter(role), HttpStatus.OK);
+		}catch (BadRequestError e) {
+			log.error(e.getMessage());
+			throw e;
 		}catch (Exception e) {
 			log.error(e.getMessage());
 			throw new InternalSeverError(e.getMessage());
